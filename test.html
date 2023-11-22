@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #draggableDiv {
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            position: absolute;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var draggableDiv = document.getElementById('draggableDiv');
+            var offsetX, offsetY, isDragging = false;
+
+            // Add touch event listeners
+            draggableDiv.addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Prevent default touch behavior
+                isDragging = true;
+                var touch = e.touches[0];
+                offsetX = touch.clientX - draggableDiv.getBoundingClientRect().left;
+                offsetY = touch.clientY - draggableDiv.getBoundingClientRect().top;
+            });
+
+            draggableDiv.addEventListener('touchmove', function(e) {
+                if (isDragging) {
+                    e.preventDefault(); // Prevent default touch behavior
+                    var touch = e.touches[0];
+                    var newX = touch.clientX - offsetX;
+                    var newY = touch.clientY - offsetY;
+
+                    // Ensure the draggable div stays within the window boundaries
+                    newX = Math.max(0, Math.min(window.innerWidth - draggableDiv.offsetWidth, newX));
+                    newY = Math.max(0, Math.min(window.innerHeight - draggableDiv.offsetHeight, newY));
+
+                    draggableDiv.style.left = newX + 'px';
+                    draggableDiv.style.top = newY + 'px';
+                }
+            });
+
+            draggableDiv.addEventListener('touchend', function() {
+                isDragging = false;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="draggableDiv"></div>
+</body>
+</html>
